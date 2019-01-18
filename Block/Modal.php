@@ -47,6 +47,9 @@ class Modal extends Template
             'autoOpen' => $this->shouldModalAutoOpen(),
             'buttonClass' => $this->getModalButtonClass(),
             'buttonText' => $this->getModalButtonText(),
+            'formId' => $this->getModalFormId(),
+            'buttonId' => $this->getModalButtonId(),
+            'useForm' => $this->useForm(),
             'displayButton' => $this->displayModalButton(),
             'clickableOverlay' => $this->isModalOverlayClickable(),
             'focus' => $this->getModalFocus(),
@@ -132,5 +135,20 @@ class Modal extends Template
             return 'popup';
         }
         throw new \Exception(__('Modal type must be either \'popup\' or \'slide\'.'));
+    }
+
+    private function useForm(): bool
+    {
+        return $this->getData('useForm') ? $this->getData('useForm') : false;
+    }
+
+    private function getModalFormId()
+    {
+        return $this->escapeHtmlAttr($this->getData('formId'));
+    }
+
+    private function getModalButtonId()
+    {
+        return $this->escapeHtmlAttr($this->getData('buttonId'));
     }
 }

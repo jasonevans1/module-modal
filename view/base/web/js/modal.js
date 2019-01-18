@@ -20,8 +20,13 @@ define([
                 button = [{
                     text: config.buttonText,
                     class: config.buttonClass,
+                    attr: {
+                        'id': config.buttonId,
+                    },
                     click: function() {
-                        this.closeModal();
+                        if (!config.useForm) {
+                            this.closeModal();
+                        }
                     }
                 }];
             }
@@ -42,6 +47,15 @@ define([
             $(trigger).click(function(event) {
                 event.preventDefault();
                 target.modal('openModal');
+
+                if (config.useForm) {
+                    let buttonID = '#' + config.buttonId;
+                    $(buttonID).attr({
+                        "form": config.formId,
+                        "data-action": "submit-form",
+                        "type": "submit"
+                    });
+                }
             });
         }
     };
