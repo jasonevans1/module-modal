@@ -50,6 +50,8 @@ class Modal extends Template
             'formId' => $this->getModalFormId(),
             'buttonId' => $this->getModalButtonId(),
             'useForm' => $this->useForm(),
+            'requireLogin' => $this->getRequireLogin(),
+            'loginRedirectUrl' => $this->getLoginRedirectUrl(),
             'displayButton' => $this->displayModalButton(),
             'clickableOverlay' => $this->isModalOverlayClickable(),
             'focus' => $this->getModalFocus(),
@@ -64,7 +66,14 @@ class Modal extends Template
 
     private function shouldModalAutoOpen(): bool
     {
-        return $this->getData('autoOpen') ? $this->getData('autoOpen') : false;
+        $autoOpenParam = $this->getData('autoOpenParam');
+        if ($this->getData('autoOpen') ||
+            ($autoOpenParam && $this->_request->getParam($autoOpenParam) === '1')) {
+            $shouldModalAutoOpen = true;
+        } else {
+            $shouldModalAutoOpen = false;
+        }
+        return $shouldModalAutoOpen;
     }
 
     private function getModalButtonClass(): string
@@ -150,5 +159,15 @@ class Modal extends Template
     private function getModalButtonId()
     {
         return $this->escapeHtmlAttr($this->getData('buttonId'));
+    }
+
+    private function getRequireLogin(): bool
+    {
+        return $this->getData('requireLogin') ? $this->getData('requireLogin') : false;
+    }
+
+    private function getLoginRedirectUrl()
+    {
+        return $this->escapeHtmlAttr($this->getData('loginRedirectUrl'));
     }
 }

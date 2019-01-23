@@ -4,8 +4,11 @@
  */
 define([
     'jquery',
-    'Magento_Ui/js/modal/modal'
-], function($) {
+    'Magento_Ui/js/modal/modal',
+    'Magento_Customer/js/model/authentication-popup',
+    'Magento_Customer/js/customer-data',
+    'mage/url'
+], function($, modal, authenticationPopup, customerData, urlBuilder) {
     'use strict';
 
     var fisheyeModal = {
@@ -20,15 +23,21 @@ define([
                 button = [{
                     text: config.buttonText,
                     class: config.buttonClass,
-                    attr: {
-                        'id': config.buttonId,
-                    },
                     click: function() {
                         if (!config.useForm) {
                             this.closeModal();
                         }
                     }
                 }];
+            }
+
+            if (config.displayButton && config.useForm) {
+                button['0'].attr = {
+                    'id': config.buttonId,
+                    "form": config.formId,
+                    "data-action": "submit-form",
+                    "type": "submit"
+                };
             }
 
             target.modal({
@@ -46,16 +55,21 @@ define([
 
             $(trigger).click(function(event) {
                 event.preventDefault();
-                target.modal('openModal');
 
-                if (config.useForm) {
-                    let buttonID = '#' + config.buttonId;
-                    $(buttonID).attr({
-                        "form": config.formId,
-                        "data-action": "submit-form",
-                        "type": "submit"
-                    });
+                if (config.requireLogin) {
+                    let customer = customerData.get('customer');
+                    if (!customer().firstname) {
+                        if (config.loginRedirectUrl) {
+                            let url = urlBuilder.build(config.loginRedirectUrl);
+                            $.cookie('login_redirect', url);
+                        }
+                        authenticationPopup.showModal();
+
+                        return false;
+                    }
                 }
+
+                target.modal('openModal');
             });
         }
     };
