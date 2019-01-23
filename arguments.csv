@@ -3,6 +3,7 @@ linkText,string,Yes,N/A,
 linkClass,string,No,N/A,
 autoOpen,boolean,No,true|false,false
 buttonClass,string,No,N/A,
+buttonId,string,No,N/A,
 buttonText,string,No,N/A,'Close'
 displayButton,boolean,No,true|false,false
 clickableOverlay,boolean,No,true|false,true
@@ -13,3 +14,7 @@ modalLeftMargin,number,No,Integer numbers,45
 responsive,boolean,No,true|false,false
 modalTitle,string,No,N/A,
 modalType,string,No,'popup'|'slide','popup'
+formId,string,No,N/A,
+useForm,boolean,No,true|false,false
+requireLogin,boolean,No,true|false,false
+loginRedirectUrl,string,No,N/A,
